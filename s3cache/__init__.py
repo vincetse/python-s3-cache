@@ -4,9 +4,6 @@ from s3file import s3file
 
 class s3cache(object):
 
-    # singleton instance
-    instance = None
-
     # initialize the cache
     def __init__(self,tmpdir,bucket_name):
         self.bucket_name = bucket_name
@@ -15,7 +12,6 @@ class s3cache(object):
         self.tmpdir = tmpdir
         self.verbosity = False
         self.caching = True
-        s3cache.instance = self
         
     # ensure that a connection to s3 exists
     def connect(self):
@@ -32,39 +28,22 @@ class s3cache(object):
             print msg
             
     # remove a file
-    def removePath(self,path):
+    def remove(self,path):
         self.connect()
-        s3f = s3file(s3cache.instance,path)
+        s3f = s3file(self,path)
         s3f.remove()
                         
     # set verbosity on/off (default=off)
-    @staticmethod
-    def setVerbosity(verbosity):
-        s3cache.instance.verbosity = verbosity
+    def setVerbosity(self,verbosity):
+        self.verbosity = verbosity
         
     # set local file caching on/off (default=on)
-    @staticmethod
-    def setCaching(caching):
-        s3cache.instance.caching = caching
+    def setCaching(self,caching):
+        self.caching = caching
 
     # open a file in the cache and return a file-like object
-    @staticmethod
-    def open(path,mode):
-        s3cache.instance.connect()
-        s3f = s3file(s3cache.instance,path)
+    def open(self,path,mode):
+        self.connect()
+        s3f = s3file(self,path)
         s3f.open(mode)
         return s3f
-        
-    @staticmethod
-    def remove(path):
-        return s3cache.instance.removePath(path)
-        
-# Configuration
-#
-# create the singleton instance        
-
-# define the local cache directory
-local_cache_directory = "/tmp"
-s3_bucket_name = "mccarroll.net.test"
-
-s3cache(local_cache_directory,s3_bucket_name)
