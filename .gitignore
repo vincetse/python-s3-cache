@@ -1,0 +1,23 @@
+*.py[c,o]
+*~
+\#*\#
+\.\#*
+TAGS
+docs/_build
+docs/api
+.coverage
+coverage
+.DS_Store
+.vagrant
+manifests/build
+
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
