@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from s3cache import s3cache
 
 s3 = s3cache("/tmp","t13d-misc")
