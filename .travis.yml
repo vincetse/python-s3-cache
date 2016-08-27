@@ -17,6 +17,7 @@ before_install:
   - docker pull lphoward/fake-s3
   - docker run -d --name my_s3 -p ${S3_PORT}:${S3_PORT} -d lphoward/fake-s3
   - docker ps -a
+  - ifconfig -a
 
 # command to install dependencies
 install:
