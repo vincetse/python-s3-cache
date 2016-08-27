@@ -10,7 +10,7 @@ python:
 
 env:
   global:
-    - S3_ENDPOINT=${DOCKER_HOST}
+    - S3_ENDPOINT=172.17.0.1
     - S3_PORT=4569
 
 before_install:
