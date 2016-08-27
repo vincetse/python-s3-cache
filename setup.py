@@ -2,13 +2,13 @@ from setuptools import setup
 
 setup(
     name='s3cache',
-    version='0.1.0',
+    version='0.1.0-dev',
     description='S3 cache by Niall McCarroll, packaged by Vince Tse',
     long_description=open('README.md').read(),
     url='https://github.com/vincetse/python-s3-cache',
     author='Vince Tse',
     author_email='thelazyenginerd@gmail.com',
-    packages=['s3cache'],
+    packages=['s3cache', exclude=['tests']],
     install_requires=[
         'boto',
     ],
