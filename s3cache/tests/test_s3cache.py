@@ -33,6 +33,7 @@ class TestS3Cache(unittest.TestCase):
     endpoint = os.environ['S3_ENDPOINT']
     port = int(os.environ['S3_PORT'])
     s3 = s3cache(local_cache, bucket_name, port=port, is_secure=False, host=endpoint)
+    print endpoint, port
     if create:
       s3.createBucket()
     return s3
