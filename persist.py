@@ -1,12 +1,9 @@
 from s3cache import s3cache
 
-s3 = s3cache("/tmp","t13d-msic")
-s3a = s3cache("/tmp","t13d-other")
+s3 = s3cache("/tmp","t13d-misc")
 
 s3.setVerbosity(True)
 s3.setCaching(False)
-s3a.setVerbosity(True)
-s3a.setCaching(False)
 
 f = s3.open("/tmp/world.txt","w")
 f.write("Hello")
@@ -25,4 +22,3 @@ f3.write("Hello")
 f3.close()
 
 s3.remove("/tmp/world.txt")
-s3a.remove("foobar.txt")
