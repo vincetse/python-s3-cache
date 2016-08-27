@@ -17,8 +17,4 @@ f2 = s3.open("/tmp/world.txt","r")
 print f2.readline()
 f2.close()
 
-f3 = s3a.open("foobar.txt","w")
-f3.write("Hello")
-f3.close()
-
 s3.remove("/tmp/world.txt")
