@@ -1,8 +1,3 @@
-sudo: required
-
-services:
-  - docker
-
 language: python
 python:
   - "2.7"
@@ -10,14 +5,12 @@ python:
 
 env:
   global:
-    - S3_ENDPOINT=172.17.0.1
+    - S3_ENDPOINT=localhost
     - S3_PORT=4569
 
 before_install:
-  - docker pull lphoward/fake-s3
-  - docker run -d --name my_s3 -p ${S3_PORT}:${S3_PORT} -d lphoward/fake-s3
-  - docker ps -a
-  - netstat -ant
+  - gem install fakes3
+  - fakes3 -r /tmp -p ${S3_PORT} &
 
 # command to install dependencies
 install:
@@ -27,5 +20,4 @@ script:
   - nosetests -v s3cache
 
 after_script:
-  - docker stop my_s3
-  - docker rm -f my_s3
+  - kill %1
