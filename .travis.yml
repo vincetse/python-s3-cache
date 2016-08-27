@@ -12,7 +12,7 @@ env:
 
 before_install:
   - gem install fakes3
-  - fakes3 -r /tmp -p ${S3_PORT} &
+  - fakes3 -r /tmp -p ${S3_PORT}
   - netstat -ant
 
 # command to install dependencies
