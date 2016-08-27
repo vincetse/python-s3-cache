@@ -30,7 +30,9 @@ class TestS3Cache(unittest.TestCase):
     local_cache = tempfile.mkdtemp()
     self.cleanup(local_cache)
     self.assertTrue(os.path.exists(local_cache))
-    s3 = s3cache(local_cache, bucket_name, port=4569, is_secure=False, host='localhost')
+    endpoint = os.environ['S3_ENDPOINT']
+    port = os.environ['S3_PORT']
+    s3 = s3cache(local_cache, bucket_name, port=port, is_secure=False, host=endpoint)
     if create:
       s3.createBucket()
     return s3
