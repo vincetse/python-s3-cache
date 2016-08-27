@@ -21,7 +21,6 @@ class s3cache(object):
         if self.conn == None:
             try:
                 self.conn = boto.connect_s3(port=self.port, host=self.host, is_secure=self.is_secure)
-                #self.bucket = self.conn.create_bucket(self.bucket_name)
             except:
                 raise "Error - cannot connect to S3"
 
@@ -47,6 +46,10 @@ class s3cache(object):
         self.connect()
         s3f = s3file(self,path)
         s3f.remove()
+
+    # get local tmp directory
+    def localCache(self):
+        return self.tmpdir
                         
     # set verbosity on/off (default=off)
     def setVerbosity(self,verbosity):
