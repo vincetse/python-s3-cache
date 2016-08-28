@@ -10,6 +10,9 @@ coverage
 .DS_Store
 .vagrant
 manifests/build
+build
+dist
+s3cache.egg-info
 
 # swap
 [._]*.s[a-w][a-z]
