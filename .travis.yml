@@ -13,7 +13,7 @@ env:
     - S3_PORT=4569
 
 before_install:
-  - gem install fakes3
+  - gem install fakes3 -v 0.2.4
   - fakes3 -r /tmp -p ${S3_PORT} &
   - sleep 10
   - cp boto.cfg ~/.boto
