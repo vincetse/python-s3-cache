@@ -1,10 +1,11 @@
 from setuptools import setup
+import pypandoc
 
 setup(
     name='s3cache',
     version='0.1.0-dev',
     description='Local cache of S3 buckets',
-    long_description=open('README.md').read(),
+    long_description=pypandoc.convert('README.md', 'rst'),
     url='https://github.com/vincetse/python-s3-cache',
     author='Vince Tse, based on work by Niall McCarroll',
     author_email='thelazyenginerd@gmail.com',
