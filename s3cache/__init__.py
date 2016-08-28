@@ -22,7 +22,7 @@ class s3cache(object):
             try:
                 self.conn = boto.connect_s3(port=self.port, host=self.host, is_secure=self.is_secure)
             except:
-                raise "Error - cannot connect to S3"
+                raise IOError("cannot connect to S3")
 
     # does the bucket exist?
     def bucketExists(self):
