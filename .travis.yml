@@ -7,6 +7,8 @@ python:
 
 env:
   global:
+    - AWS_ACCESS_KEY_ID=A1FAKE1ACCESS1KEY1ID
+    - AWS_SECRET_ACCESS_KEY=ooQu8onaePaiKieR8adier2eiw5beiwowoome6ya
     - S3_ENDPOINT=localhost
     - S3_PORT=4569
 
