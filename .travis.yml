@@ -15,12 +15,8 @@ env:
 before_install:
   - gem install fakes3 -v 0.2.4
   - fakes3 -r /tmp -p ${S3_PORT} &
-  - sleep 10
+  - sleep 5
   - cp boto.cfg ~/.boto
-  - netstat -ant
-  - curl -v ${S3_ENDPOINT}:${S3_PORT}
-  - cat /etc/hosts
-  - hostname
 
 # command to install dependencies
 install:
