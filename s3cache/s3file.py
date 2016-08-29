@@ -18,7 +18,9 @@ class S3File(object):
         self.path = path
         self.mode = None
         self.file = None
-        self.tmppath = os.path.join(mgr.tmpdir, s3cache.utils.mangle(path))
+        # DELETE self.tmppath = os.path.join(mgr.tmpdir,
+        #  s3cache.utils.mangle(path))
+        self.tmppath = s3cache.utils.abspath(mgr.tmpdir, path)
 
     def remove_cached(self):
         """Remove locally-cached copy."""
@@ -67,6 +69,7 @@ class S3File(object):
     def open(self, mode):
         """Opens a file to read or write operations."""
         self._bucket_exists_()
+        s3cache.utils.makedirs(self.tmppath)
         self.mode = mode
         if 'r' in self.mode or 'a' in self.mode:
             # opening an existing file, try to copy in from s3 if not in local
@@ -84,9 +87,6 @@ class S3File(object):
                     k.get_contents_to_filename(self.tmppath)
                     self.log("file located in S3, downloaded from S3 to cache")
                 except S3ResponseError:
-                    if 'a' in self.mode:
-                        self.log("file not found in S3, opening new empty "
-                                 "file in local cache")
                     raise S3CacheIOError("//{0}/{1}"
                                          .format(self.mgr.bucket_name,
                                                  self.path))

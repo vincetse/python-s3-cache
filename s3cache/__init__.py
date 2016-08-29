@@ -57,6 +57,7 @@ class S3Cache(object):
                 retv = True
             except S3ResponseError as err:
                 self.log("Error deleting bucket: " + err)
+                # TODO Should this be an exception?  But what kind?
             self.bucket = None
         return retv
 
