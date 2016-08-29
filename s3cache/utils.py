@@ -1,16 +1,20 @@
 """Utility functions"""
+import os
 
 
-def mangle(path):
-    """mangle the original file path to replace separators with underscores
-    and double up existing underscores
+def abspath(root, filepath):
+    """Create a fully-qualified path from the temp root and filepath"""
+    fullpath = "{0}{1}{2}".format(root, os.sep, filepath)
+    dirname = os.path.abspath(fullpath)
+    return dirname
+
+
+def makedirs(filepath):
+    """Ensure that the directories that the filepath exists,
+    or creates them if they do not.
     """
-    mangled_path = ''
-    for char in path:
-        if char == '/':
-            mangled_path += '_'
-        elif char == '_':
-            mangled_path += '__'
-        else:
-            mangled_path += char
-    return mangled_path
+    # joining paths, but using os.path.join() will given wrong output if
+    # filepath looks like an absolute directory.
+    dirname = os.path.dirname(filepath)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
