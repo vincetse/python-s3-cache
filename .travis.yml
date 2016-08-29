@@ -23,6 +23,7 @@ install:
 
 script:
 - pep8
+- pylint s3cache
 - nosetests -v s3cache
 
 after_script:
