@@ -66,7 +66,6 @@ class S3File(object):
 
     def open(self, mode):
         """Opens a file to read or write operations."""
-        # TODO check that bucket exists
         self._bucket_exists_()
         self.mode = mode
         if 'r' in self.mode or 'a' in self.mode:
