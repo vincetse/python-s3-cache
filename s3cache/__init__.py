@@ -1,11 +1,17 @@
-import boto
+"""
+An AWS S3 local cache.
+"""
 import os
-from s3file import s3file
+import boto
+from .s3file import S3File
 
 
-class s3cache(object):
+# pylint: disable=too-many-instance-attributes
+class S3Cache(object):
+    """Caches AWS S3 objects locally."""
 
     # initialize the cache
+    # pylint: disable=too-many-arguments
     def __init__(self, tmpdir, bucket_name,
                  host='s3.amazonaws.com', port=None, is_secure=True):
         self.bucket_name = bucket_name
@@ -18,8 +24,9 @@ class s3cache(object):
         self.port = port
         self.is_secure = is_secure
 
-    # ensure that a connection to s3 exists
     def connect(self):
+        """Connect to AWS S3.  """
+
         if self.conn is None:
             try:
                 self.conn = boto.connect_s3(
@@ -27,44 +34,46 @@ class s3cache(object):
             except:
                 raise IOError("cannot connect to S3")
 
-    # does the bucket exist?
-    def bucketExists(self):
+    def bucket_exists(self):
+        """Checks for existence of bucket"""
         self.connect()
         bucket = self.conn.lookup(self.bucket_name)
-        return (bucket is not None)
+        return bucket is not None
 
-    # create bucket
-    def createBucket(self):
-        if not self.bucketExists():
+    def create_bucket(self):
+        """Creates a bucket"""
+        if not self.bucket_exists():
             self.bucket = self.conn.create_bucket(self.bucket_name)
-        return (self.bucket is not None)
+        return self.bucket is not None
 
-    # write a message to the log (if verbosity is on)
     def log(self, msg):
+        """Write a message to the log (if verbosity is on)"""
         if self.verbosity:
             print msg
 
-    # remove a file
     def remove(self, path):
+        """Removes a file."""
         self.connect()
-        s3f = s3file(self, path)
+        s3f = S3File(self, path)
         s3f.remove()
 
-    # get local tmp directory
-    def localCache(self):
+    def local_cache(self):
+        """Gets the local cache directory"""
         return self.tmpdir
 
-    # set verbosity on/off (default=off)
-    def setVerbosity(self, verbosity):
+    def set_verbosity(self, verbosity):
+        """Sets verbosity"""
         self.verbosity = verbosity
 
-    # set local file caching on/off (default=on)
-    def setCaching(self, caching):
+    def set_caching(self, caching):
+        """Determines if we always go out to S3 or use local copy
+        if it exists.  (default: on)
+        """
         self.caching = caching
 
-    # open a file in the cache and return a file-like object
     def open(self, path, mode):
+        """open a file in the cache and return a file-like object."""
         self.connect()
-        s3f = s3file(self, path)
+        s3f = S3File(self, path)
         s3f.open(mode)
         return s3f
