@@ -60,6 +60,14 @@ class TestS3Cache(unittest.TestCase):
         # delete non-existent bucket
         self.assertTrue(s3.remove_bucket())
 
+    def testBucketDeleteError(self):
+        create = False
+        s3 = self.bucketFactory(create)
+        # does the bucket exist?
+        self.assertFalse(s3.bucket_exists())
+        # delete non-existant bucket
+        s3.remove_bucket()
+
     @raises(S3CacheBucketNotExistError)
     def testReadWriteOnNonExistentBucket(self):
         create = False
