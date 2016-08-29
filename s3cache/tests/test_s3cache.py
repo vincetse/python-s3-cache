@@ -69,7 +69,6 @@ class TestS3Cache(unittest.TestCase):
         # Try some operations on a non-existent bucket
         object_name = "bucket-does-not-exist.txt"
         f = s3.open(object_name, "r")
-        self.assertFalse(f.exists())
 
     @raises(S3CacheIOError)
     def testReadNonExistentFile(self):
