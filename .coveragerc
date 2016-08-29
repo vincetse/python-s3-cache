@@ -1,0 +1,5 @@
+[report]
+omit =
+    persist.py
+    */python?.?/*
+    */site-packages/nose/*

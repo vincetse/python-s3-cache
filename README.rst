@@ -1,4 +1,4 @@
-|Build Status|
+|Build Status| |Coverage| |Code Climate|
 
 S3 Cache for Python
 ===================
@@ -46,3 +46,11 @@ References
 
 .. |Build Status| image:: https://travis-ci.org/vincetse/python-s3-cache.svg?branch=master
    :target: https://travis-ci.org/vincetse/python-s3-cache
+
+.. |Coverage| image:: https://coveralls.io/repos/github/vincetse/python-s3-cache/badge.svg?branch=master
+   :target: https://coveralls.io/github/vincetse/python-s3-cache?branch=master
+
+.. }Code Climate| image:: https://codeclimate.com/github/vincetse/python-s3-cache/badges/issue_count.svg
+   :target: https://codeclimate.com/github/vincetse/python-s3-cache
+   :alt: Issue Count
+
