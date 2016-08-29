@@ -8,12 +8,6 @@ class S3CacheError(Exception):
         super(S3CacheError, self).__init__(reason, *args)
         self.reason = reason
 
-    def __repr__(self):
-        return 'S3CacheError: {0}'.format(self.reason)
-
-    def __str__(self):
-        return 'S3CacheError: {0}'.format(self.reason)
-
 
 class S3CacheBucketNotExistError(S3CacheError):
     """Operating on a non-existent bucket"""
