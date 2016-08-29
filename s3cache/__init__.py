@@ -3,6 +3,7 @@ An AWS S3 local cache.
 """
 import os
 import boto
+from boto.exception import S3ResponseError
 from .s3file import S3File
 
 
@@ -26,13 +27,13 @@ class S3Cache(object):
 
     def connect(self):
         """Connect to AWS S3.  """
-
         if self.conn is None:
             try:
                 self.conn = boto.connect_s3(
                     port=self.port, host=self.host, is_secure=self.is_secure)
             except:
                 raise IOError("cannot connect to S3")
+            self.bucket = self.conn.lookup(self.bucket_name)
 
     def bucket_exists(self):
         """Checks for existence of bucket"""
@@ -46,16 +47,35 @@ class S3Cache(object):
             self.bucket = self.conn.create_bucket(self.bucket_name)
         return self.bucket is not None
 
+    def remove_bucket(self):
+        """Removes a bucket if it exists.  You probably don't want to use
+        this."""
+        retv = False
+        if self.bucket_exists():
+            try:
+                self.conn.delete_bucket(self.bucket_name)
+                retv = True
+            except S3ResponseError as err:
+                self.log("Error deleting bucket: " + err)
+            self.bucket = None
+        return retv
+
+    def object_exists(self, path):
+        """Determine if an object exists on S3"""
+        self.connect()
+        s3f = S3File(self, path)
+        return s3f.exists()
+
     def log(self, msg):
         """Write a message to the log (if verbosity is on)"""
         if self.verbosity:
             print msg
 
-    def remove(self, path):
+    def remove_object(self, path):
         """Removes a file."""
         self.connect()
         s3f = S3File(self, path)
-        s3f.remove()
+        return s3f.remove()
 
     def local_cache(self):
         """Gets the local cache directory"""

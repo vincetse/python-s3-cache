@@ -5,6 +5,7 @@ import os
 from boto.s3.key import Key
 from boto.exception import S3ResponseError
 import s3cache.utils
+from s3cache.exception import S3CacheBucketNotExistError, S3CacheIOError
 
 
 class S3File(object):
@@ -19,8 +20,8 @@ class S3File(object):
         self.file = None
         self.tmppath = os.path.join(mgr.tmpdir, s3cache.utils.mangle(path))
 
-    def remove_cache(self):
-        """remove local cache copy."""
+    def remove_cached(self):
+        """Remove locally-cached copy."""
         retv = True
         if os.path.exists(self.tmppath):
             try:
@@ -35,24 +36,43 @@ class S3File(object):
     def remove(self):
         """Remove a file locally and from S3."""
         self.log("removing file")
-        self.remove_cache()
+        self.remove_cached()
         self.log("removing file from S3")
-        k = Key(self.mgr.bucket)
-        k.key = self.path
-        delete_result = k.delete()
-        retv = len(delete_result.errors) == 0
-        for error in delete_result.errors:
-            self.log("Problem removing file: " + error.key)
+        retv = True
+        try:
+            k = Key(self.mgr.bucket, self.path)
+            k.delete()
+        except (S3ResponseError, ValueError) as err:
+            retv = False
+            self.log("Problem removing file: " + err)
         return retv
 
-    def open(self, mode):
-        """Opens a file to read or write operations.
+    def exists(self):
+        """Determines if a file exists on S3"""
+        retv = False
+        try:
+            k = Key(self.mgr.bucket, self.path)
+            retv = k.exists()
+        except S3ResponseError as err:
+            retv = False
+            self.log("Problem checking existence of file: " + err)
+        return retv
+
+    def cached(self):
+        """Determines if files is cached locally, but without regard of
+        whether it exists in S3.
         """
+        return os.path.exists(self.tmppath)
+
+    def open(self, mode):
+        """Opens a file to read or write operations."""
+        # TODO check that bucket exists
+        self._bucket_exists_()
         self.mode = mode
         if 'r' in self.mode or 'a' in self.mode:
             # opening an existing file, try to copy in from s3 if not in local
             # cache
-            self.log("trying to open existing file")
+            self.log("trying to open file")
             use_local_copy = self.mgr.caching
             if use_local_copy:
                 if not os.path.exists(self.tmppath):
@@ -60,14 +80,17 @@ class S3File(object):
                         "not found in local cache, attempting to load from S3")
                     use_local_copy = False
             if not use_local_copy:
+                k = Key(self.mgr.bucket, self.path)
                 try:
-                    k = Key(self.mgr.bucket)
-                    k.key = self.path
                     k.get_contents_to_filename(self.tmppath)
                     self.log("file located in S3, downloaded from S3 to cache")
                 except S3ResponseError:
-                    self.log("file not found in S3, opening new empty file "
-                             "in local cache")
+                    if 'a' in self.mode:
+                        self.log("file not found in S3, opening new empty "
+                                 "file in local cache")
+                    raise S3CacheIOError("//{0}/{1}"
+                                         .format(self.mgr.bucket_name,
+                                                 self.path))
             else:
                 self.log("file found in local cache")
         else:
@@ -106,16 +129,23 @@ class S3File(object):
         bytes_written = 0
         if 'w' in self.mode or 'a' in self.mode:
             self.log("writing updated cache file contents to S3")
-            k = Key(self.mgr.bucket)
-            k.key = self.path
+            k = Key(self.mgr.bucket, self.path)
             try:
                 bytes_written = k.set_contents_from_filename(self.tmppath)
-            except AttributeError:
-                # Should have been caught by boto, but it's not.
-                # TODO is this a case we should handle?
-                pass
+            except AttributeError as err:
+                self.log(str(err))
+                raise
+        if not self.mgr.caching:
+            # remove the local copy if caching is turned off
+            self.remove_cached()
         return bytes_written
 
     def log(self, msg):
         """Logger"""
         self.mgr.log("S3File(" + self.path + "): " + msg)
+
+    def _bucket_exists_(self):
+        """Internal sanity check"""
+        self.mgr.connect()
+        if not self.mgr.bucket_exists():
+            raise S3CacheBucketNotExistError(self.mgr.bucket_name)
