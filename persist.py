@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-from s3cache import s3cache
+from s3cache import S3Cache
 
-s3 = s3cache("/tmp", "t13d-misc")
+s3 = S3Cache("/tmp", "t13d-misc")
 
-s3.setVerbosity(True)
-s3.setCaching(False)
+s3.set_verbosity(True)
+s3.set_caching(False)
 
 f = s3.open("/tmp/world.txt", "w")
 f.write("Hello")

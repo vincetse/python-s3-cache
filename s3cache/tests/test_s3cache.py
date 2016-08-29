@@ -5,7 +5,7 @@ import os
 import shutil
 import tempfile
 import uuid
-from s3cache import s3cache
+from s3cache import S3Cache
 
 
 def _read_file(filename):
@@ -34,11 +34,11 @@ class TestS3Cache(unittest.TestCase):
         self.assertTrue(os.path.exists(local_cache))
         endpoint = os.environ['S3_ENDPOINT']
         port = int(os.environ['S3_PORT'])
-        s3 = s3cache(local_cache, bucket_name, port=port,
+        s3 = S3Cache(local_cache, bucket_name, port=port,
                      is_secure=False, host=endpoint)
         print endpoint, port
         if create:
-            s3.createBucket()
+            s3.create_bucket()
         return s3
 
     def testBucketExists(self):
@@ -46,7 +46,7 @@ class TestS3Cache(unittest.TestCase):
         s3 = self.bucketFactory(create)
 
         # does the bucket exist?
-        self.assertFalse(s3.bucketExists())
+        self.assertFalse(s3.bucket_exists())
 
     def testCreateAndDownloadFile(self):
         # Write a file out file
@@ -58,7 +58,7 @@ class TestS3Cache(unittest.TestCase):
         f.close()
 
         # Now check it content directly
-        local_cache = s3.localCache()
+        local_cache = s3.local_cache()
         local_filename = os.path.join(local_cache, object_name)
         self.assertTrue(os.path.exists(local_filename))
         local_content = _read_file(local_filename)
