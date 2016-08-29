@@ -84,9 +84,6 @@ class S3File(object):
                     k.get_contents_to_filename(self.tmppath)
                     self.log("file located in S3, downloaded from S3 to cache")
                 except S3ResponseError:
-                    if 'a' in self.mode:
-                        self.log("file not found in S3, opening new empty "
-                                 "file in local cache")
                     raise S3CacheIOError("//{0}/{1}"
                                          .format(self.mgr.bucket_name,
                                                  self.path))
