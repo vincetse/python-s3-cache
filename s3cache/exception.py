@@ -9,6 +9,14 @@ class S3CacheError(Exception):
         self.reason = reason
 
 
+class S3CacheConnectError(S3CacheError):
+    """Cannot connect to endpoint"""
+
+    def __init__(self, reason, *args):
+        self.reason = "Cannot connect to S3 endpoint: {0}".format(reason)
+        super(S3CacheConnectError, self).__init__(self.reason, *args)
+
+
 class S3CacheBucketNotExistError(S3CacheError):
     """Operating on a non-existent bucket"""
 

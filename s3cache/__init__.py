@@ -1,10 +1,12 @@
 """
 An AWS S3 local cache.
 """
+from __future__ import print_function
 import os
 import boto
 from boto.exception import S3ResponseError
 from .s3file import S3File
+from .exception import S3CacheConnectError
 
 
 # pylint: disable=too-many-instance-attributes
@@ -32,7 +34,10 @@ class S3Cache(object):
                 self.conn = boto.connect_s3(
                     port=self.port, host=self.host, is_secure=self.is_secure)
             except:
-                raise IOError("cannot connect to S3")
+                protocol = "https" if self.is_secure else "http"
+                endpoint = "{0}://{1}:{2}".format(protocol, self.host,
+                                                  self.port)
+                raise S3CacheConnectError(endpoint)
             self.bucket = self.conn.lookup(self.bucket_name)
 
     def bucket_exists(self):
@@ -70,7 +75,7 @@ class S3Cache(object):
     def log(self, msg):
         """Write a message to the log (if verbosity is on)"""
         if self.verbosity:
-            print msg
+            print(msg)
 
     def remove_object(self, path):
         """Removes a file."""

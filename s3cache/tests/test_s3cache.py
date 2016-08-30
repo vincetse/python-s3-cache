@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import uuid
 from s3cache import S3Cache
-from s3cache.exception import S3CacheBucketNotExistError, S3CacheIOError
+from s3cache.exception import *
 
 
 def _read_file(filename):
@@ -43,6 +43,18 @@ class TestS3Cache(unittest.TestCase):
             s3.set_verbosity(True)
             s3.set_caching(True)
         return s3
+
+    @raises(S3CacheConnectError)
+    def testS3ConnectionTimeout(self):
+        bucket_name = str(uuid.uuid4())
+        local_cache = tempfile.mkdtemp()
+        self.cleanup(local_cache)
+        self.assertTrue(os.path.exists(local_cache))
+        endpoint = uuid.uuid4()
+        port = 1000
+        s3 = S3Cache(local_cache, bucket_name, port=port,
+                     is_secure=False, host=endpoint)
+        s3.connect()
 
     def testBucketExists(self):
         create = False

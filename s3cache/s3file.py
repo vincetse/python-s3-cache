@@ -5,7 +5,7 @@ import os
 from boto.s3.key import Key
 from boto.exception import S3ResponseError
 import s3cache.utils
-from s3cache.exception import S3CacheBucketNotExistError, S3CacheIOError
+from .exception import S3CacheBucketNotExistError, S3CacheIOError
 
 
 class S3File(object):
