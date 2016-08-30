@@ -1,6 +1,7 @@
 """
 An AWS S3 local cache.
 """
+from __future__ import print_function
 import os
 import boto
 from boto.exception import S3ResponseError
@@ -74,7 +75,7 @@ class S3Cache(object):
     def log(self, msg):
         """Write a message to the log (if verbosity is on)"""
         if self.verbosity:
-            print msg
+            print(msg)
 
     def remove_object(self, path):
         """Removes a file."""
