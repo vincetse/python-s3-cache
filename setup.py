@@ -1,9 +1,8 @@
 from setuptools import setup
-import pypandoc
 
 setup(
     name='s3cache',
-    version='0.1.0rc1',
+    version='0.1.0rc2',
     description='Local cache of S3 buckets',
     long_description=open('README.rst').read(),
     url='https://github.com/vincetse/python-s3-cache',
