@@ -40,5 +40,5 @@ deploy:
     secure: xI/Pz+U0H66zK1cpWZKa9l2zPdsHQKZbHX3CoWbuvIHmt6k0+dBKl2fBs81xb0IgcIIgKzAjQz02JdSJXsRKO2sWlu9ixuXyoyptHikukvLoB75xZY9ZXP682RDk7TIwmFhqnDYdmGjCWHfs/UsyswN0g+4EXBDjbi2ff1fohxXLS+eOgsIEeR0dye4KK+89HLcNF3m3C0Dj8dMihX4Px6DzXtBg3z2zQRZOAFtrW6rsql5OZNEKrumBiMPOBHgJcdx3hcsg5u7lp9fBVIWCa374tn3W8lze0kWq+/SQp7N4aWyhgecKWRd60kFnYMe7TGlOzBjxOI03bI3K4WUosL5/Pni68gBXD93WfMLH+0ZGWEeziJm60a3Q/hKXKRcVkgqFmAnYOCIkRnaM3/Ws5GgdjDtJUTxmp+MxYvXEX39u7X6YPgrxscZXz67guPordjD/V07hCV4pogXMNgF7bfv3ouVc664Ebd56atKkJ1O+G1UfxC2Uj7j4NDIWQ4cCUP1QCagCJtXpHExFkH6mRU3omKlmNpub2jqODUxrx+Rve0fqJIrwvSE+3BSuYi/6LFEy/yei3IiY5DXJOgNoA6N4TNMowG23tzp/IXzTDB7WGMd7IqTc1FD0YP3jE3MdnPzz9f9B7SZJJOFE6mmTAnJAqdBb/FwhA3ToCT44pbw=
   on:
     tags: true
-    distributions: sdist bdist_wheel
+    distributions: sdist
     repo: vincetse/python-s3-cache
