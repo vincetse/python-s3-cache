@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='s3cache',
-    version='0.1.0',
+    version='0.1.1',
     description='Local cache of S3 buckets',
     long_description=open('README.rst').read(),
     url='https://github.com/vincetse/python-s3-cache',
