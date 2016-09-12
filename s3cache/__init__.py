@@ -4,6 +4,7 @@ An AWS S3 local cache.
 from __future__ import print_function
 import os
 import boto
+import boto.s3.connection
 from boto.exception import S3ResponseError
 from .s3file import S3File
 from .exception import S3CacheConnectError
