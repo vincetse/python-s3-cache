@@ -32,7 +32,8 @@ class S3Cache(object):
         if self.conn is None:
             try:
                 self.conn = boto.connect_s3(
-                    port=self.port, host=self.host, is_secure=self.is_secure)
+                    port=self.port, host=self.host, is_secure=self.is_secure,
+                    calling_format=boto.s3.connection.OrdinaryCallingFormat())
             except:
                 protocol = "https" if self.is_secure else "http"
                 endpoint = "{0}://{1}:{2}".format(protocol, self.host,
