@@ -19,6 +19,7 @@ before_install:
 - cp boto.cfg ~/.boto
 
 install:
+- pip install google_compute_engine
 - pip install -r requirements.txt
 - pip install coveralls
 
